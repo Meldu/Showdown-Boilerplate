@@ -2339,7 +2339,7 @@ exports.BattleMovedex = {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
 				delete move.onHit;
-				move.self = {boosts: {atk:1, def:1, spe:-1}};
+				move.self = {boosts: {spe:-1, atk:1, def:1}};
 			} else if (move.volatileStatus && target.volatiles.curse) {
 				return false;
 			}
@@ -5290,8 +5290,8 @@ exports.BattleMovedex = {
 			onEnd: function (targetSide) {
 				this.add('-sideend', targetSide, 'Grass Pledge');
 			},
-			onModifySpe: function (speMod, pokemon) {
-				return this.chain(speMod, 0.25);
+			onModifySpe: function (spe, pokemon) {
+				return this.chainModify(0.25);
 			}
 		},
 		secondary: false,
@@ -8037,7 +8037,7 @@ exports.BattleMovedex = {
 				}
 			}
 			if (!targets.length) return false;
-			for (var i = 0; i < targets.length; i++) this.boost({spd: 1, def: 1}, targets[i], source, 'move: Magnetic Flux');
+			for (var i = 0; i < targets.length; i++) this.boost({def: 1, spd: 1}, targets[i], source, 'move: Magnetic Flux');
 		},
 		secondary: false,
 		target: "allySide",
@@ -11703,7 +11703,7 @@ exports.BattleMovedex = {
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a 30% chance to cause a secondary effect on the target based on the battle terrain. Causes paralysis on the regular Wi-Fi terrain, causes paralysis during Electric Terrain, lowers Special Attack by 1 stage during Misty Terrain, and causes sleep during Grassy Terrain. The secondary effect chance is not affected by the Ability Serene Grace.",
-		shortDesc: "Effect varies with terrain. (30% accuracy lower 1.)",
+		shortDesc: "Effect varies with terrain. (30% paralysis chance)",
 		id: "secretpower",
 		name: "Secret Power",
 		pp: 20,
@@ -11997,11 +11997,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		boosts: {
+			def: -1,
+			spd: -1,
 			atk: 2,
 			spa: 2,
-			spe: 2,
-			def: -1,
-			spd: -1
+			spe: 2
 		},
 		secondary: false,
 		target: "self",
@@ -12021,8 +12021,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		boosts: {
-			atk: 1,
-			spe: 2
+			spe: 2,
+			atk: 1
 		},
 		secondary: false,
 		target: "self",
@@ -13944,8 +13944,8 @@ exports.BattleMovedex = {
 			onStart: function (side) {
 				this.add('-sidestart', side, 'move: Tailwind');
 			},
-			onModifySpe: function (speMod, pokemon) {
-				return this.chain(speMod, 2);
+			onModifySpe: function (spe, pokemon) {
+				return this.chainModify(2);
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 4,
@@ -14835,9 +14835,9 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		self: {
 			boosts: {
+				spe: -1,
 				def: -1,
-				spd: -1,
-				spe: -1
+				spd: -1
 			}
 		},
 		secondary: false,

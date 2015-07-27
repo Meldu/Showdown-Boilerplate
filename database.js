@@ -51,10 +51,11 @@ databases.lowdb = function () {
 	 * @param {Function} callback(err, total)
 	 */
 	methods.total = function (key, callback) {
-		var total = db('users').reduce(function (total, obj) {
-			return total + obj[key];
+		var total = db('users').reduce(function (acc, user) {
+			if (!acc[key] || !user[key]) return {money: acc[key]};
+			return {money: acc[key] + user[key]};
 		});
-		callback(null, total);
+		callback(null, total.money);
 	};
 
 	/**
@@ -76,11 +77,47 @@ databases.lowdb = function () {
 	methods.sortDesc = function (key, amount, callback) {
 		var value = db('users')
 						.chain()
+						.filter(function (user) {
+							return user.money >= 0;
+						})
 						.sortByOrder('money', ['desc'])
 						.take(amount)
 						.value();
 
 		callback(null, value);
+	};
+
+	/**
+	* Get a key in the database.
+	*
+	* @param {String} key
+	* @param {Function} callback(err, key)
+	*/
+	methods.get = function (key, callback) {
+		if (key === 'users') return callback(new Error('Cannot overwrite users'));
+		callback(null, db.object[key]);
+	};
+
+	/**
+	* Set a key in the database.
+	*
+	* @param {String} key
+	* @param {Number} value
+	* @param {Function} callback(err, newKey)
+	*/
+	methods.set = function (key, value, callback) {
+		if (key === 'users') return callback(new Error('Cannot overwrite users'));
+		db.object[key] = value;
+		callback(null, db.object[key]);
+	};
+
+	/**
+	* Get the users array in the database.
+	*
+	* @param {Function} callback(err, users)
+	*/
+	methods.users = function (callback) {
+		callback(null, db('users').value());
 	};
 
 	return methods;
