@@ -794,7 +794,15 @@ exports.Formats = [
 
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
+                
+        {
+		name: "[Gen 5] Random Battle",
+		section: "BW2 Singles",
 
+		mod: 'gen5',
+		team: 'random',
+		ruleset: ['Pokemon', 'Standard']
+	},
 	{
 		name: "[Gen 5] OU",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522693\">BW Resources</a>"],
