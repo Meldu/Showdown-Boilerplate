@@ -149,6 +149,7 @@ exports.commands = {
 	profile: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		if (target.length >= 19) return this.sendReply("Usernames are required to be less than 19 characters long.");
+		if (taget.userId === 'austin') return this.sendReply("Profile unavaliable xd");
 		var targetUser = this.targetUserOrSelf(target);
 		var profile;
 		if (!targetUser) {
