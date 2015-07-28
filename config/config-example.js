@@ -256,6 +256,19 @@ exports.grouplist = [
 		tournamentsmanagement: true
 	},
 	{
+	        symbol: '$',
+	        id: "developer",
+	        name: "Developer",
+		inherit: "@",
+		jurisdiction: '@u',
+		forcewin: true,
+		declare: true,
+		modchatall: true,
+		hotpatch: true,
+		globalonly: true,
+		tournamentsmanagement: true
+	},
+	{
 		symbol: '#',
 		id: "owner",
 		name: "Room Owner",
