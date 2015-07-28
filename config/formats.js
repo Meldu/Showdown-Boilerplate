@@ -906,6 +906,26 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "VGC 13",
+		section: "BW2 Doubles",
+
+                gameType: 'doubles',
+		mod: 'gen5',
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		banlist: ['Soul Dew', 'Dark Void'],
+		validateTeam: function (team, format) {
+			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
+		},	
+		onBegin: function () {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
 		name: "[Gen 5] GBU Doubles",
 		section: 'BW2 Doubles',
 
