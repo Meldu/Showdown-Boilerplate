@@ -906,6 +906,17 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "[Gen 5] Doubles Random Battle",
+		section: 'BW2 Doubles',
+		column: 3,
+		
+		mod: 'gen5',
+		gameType: 'doubles',
+		team: 'randomDoubles',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: []
+	},
+	{
 		name: "VGC 13",
 		section: "BW2 Doubles",
 
