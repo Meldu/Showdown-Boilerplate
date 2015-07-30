@@ -758,8 +758,6 @@ exports.BattleScripts = {
 			UU: 78,
 			BL: 76,
 			OU: 74,
-			CAP: 74,
-			Unreleased: 74,
 			Uber: 70
 		};
 		var customScale = {
@@ -843,9 +841,6 @@ exports.BattleScripts = {
 			case 'Uber':
 				if (uberCount > 1 && this.random(5) >= 1) continue;
 				break;
-			case 'CAP':
-				// CAPs have 20% the normal rate
-				if (this.random(5) >= 1) continue;
 			}
 
 			// Adjust rate for species with multiple formes
