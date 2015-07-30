@@ -802,6 +802,7 @@ exports.Formats = [
 		mod: 'gen5',
 		team: 'random',
 		ruleset: ['Pokemon', 'Standard']
+		banlist: ['CAP']
 	},
 	{
 		name: "[Gen 5] OU",
@@ -914,7 +915,7 @@ exports.Formats = [
 		gameType: 'doubles',
 		team: 'randomDoubles',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: []
+		banlist: ['CAP']
 	},
 	{
 		name: "VGC 13",
