@@ -914,7 +914,6 @@ exports.Formats = [
 		gameType: 'doubles',
 		team: 'randomDoubles',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: []
 	},
 	{
 		name: "VGC 13",
