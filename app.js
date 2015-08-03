@@ -103,9 +103,11 @@ if (Config.watchconfig) {
 }
 
 // Autoconfigure the app when running in cloud hosting environments:
-var cloudenv = require('cloud-env');
-Config.bindaddress = cloudenv.get('IP', Config.bindaddress || '');
-Config.port = cloudenv.get('PORT', Config.port);
+try {
+	var cloudenv = require('cloud-env');
+	Config.bindaddress = cloudenv.get('IP', Config.bindaddress || '');
+	Config.port = cloudenv.get('PORT', Config.port);
+} catch (e) {}
 
 if (require.main === module && process.argv[2] && parseInt(process.argv[2])) {
 	Config.port = parseInt(process.argv[2]);
@@ -316,7 +318,15 @@ global.Rooms = require('./rooms.js');
 
 global.Tells = require('./tells.js');
 
-global.Database = require('./database.js')('lowdb');
+global.Database = require('./database.js')(Config.database);
+
+try {
+	global.Seen = JSON.parse(fs.readFileSync('config/seen.json', 'utf8'));
+} catch (e) {
+	if (e instanceof SyntaxError) e.message = 'Malformed JSON in seen.json: \n' + e.message;
+	if (e.code !== 'ENOENT') throw e;
+	global.Seen = {};
+}
 
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier.js');

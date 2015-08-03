@@ -2,7 +2,9 @@
  * Miscellaneous commands
  */
 
+var fs = require('fs');
 var moment = require('moment');
+var request = require('request');
 
 var messages = [
 	"has vanished into nothingness!",
@@ -160,6 +162,35 @@ exports.commands = {
 	},
 	poofoffhelp: ["/poofoff - Disable the use of the /poof command."],
 
+	regdate: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (!target || target === "0") target = toId(user.userid);
+		if (!target || target === "." || target === "," || target === "'") return this.parse('/help regdate');
+		var username = toId(target);
+		target = target.replace(/\s+/g, '');
+		var self = this, data;
+		request('http://pokemonshowdown.com/users/~' + target, function (error, response, content) {
+			if (!(!error && response.statusCode === 200)) return;
+			content = content + '';
+			content = content.split("<em");
+			if (content[1]) {
+				content = content[1].split("</p>");
+				if (content[0]) {
+					content = content[0].split("</em>");
+					if (content[1]) {
+						var regdate = content[1].split('</small>')[0] + '.';
+						data = Tools.escapeHTML(username) + " was registered on" + regdate;
+					}
+				}
+			} else {
+				data = Tools.escapeHTML(username) + " is not registered.";
+			}
+			self.sendReplyBox(Tools.escapeHTML(data));
+			room.update();
+		});
+	},
+	regdatehelp: ["/regdate - Please specify a valid username."],
+
 	show: function (target, room, user) {
 		if (!this.can('lock')) return false;
 		user.hiding = false;
@@ -179,16 +210,10 @@ exports.commands = {
 		if (!target) return this.parse('/help seen');
 		var targetUser = Users.get(target);
 		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
-		Database.read('seen', toId(target), function (err, seen) {
-			if (err) throw err;
-			target = Tools.escapeHTML(target);
-			if (!seen) {
-				this.sendReplyBox(target + " has never been online on this server.");
-			} else {
-				this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
-			}
-			room.update();
-		}.bind(this));
+		target = Tools.escapeHTML(target);
+		var seen = Seen[toId(target)];
+		if (!seen) return this.sendReplyBox(target + " has never been online on this server.");
+		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
 	},
 
 	seenhelp: ["/seen - Shows when the user last connected on the server."],

@@ -1,4 +1,5 @@
 var color = require('../config/color');
+var fs = require('fs');
 var moment = require('moment');
 
 var BR = '<br>';
@@ -13,12 +14,12 @@ var trainersprites = [1, 2, 101, 102, 169, 170, 265, 266, 168];
  * @param {Object|String} user - if isOnline then Object else String
  * @param {String} image
  */
-function Profile (isOnline, user, image) {
+function Profile(isOnline, user, image) {
 	this.isOnline = isOnline || false;
 	this.user = user || null;
 	this.image = image;
 
-	this.username = this.isOnline ? this.user.name : this.user;
+	this.username = Tools.escapeHTML(this.isOnline ? this.user.name : this.user);
 	this.url = Config.avatarurl || '';
 }
 
@@ -33,7 +34,7 @@ function Profile (isOnline, user, image) {
  * @param {String} text
  * @return {String}
  */
-function bold (text) {
+function bold(text) {
 	return '<b>' + text + '</b>';
 }
 
@@ -48,7 +49,7 @@ function bold (text) {
  * @param {String} text
  * @return {String}
  */
-function font (color, text) {
+function font(color, text) {
 	return '<font color="' + color + '">' + text + '</font>';
 }
 
@@ -62,7 +63,7 @@ function font (color, text) {
  * @param {String} link
  * @return {String}
  */
-function img (link) {
+function img(link) {
 	return '<img src="' + link + '" height="80" width="80" align="left">';
 }
 
@@ -78,11 +79,11 @@ function img (link) {
  * @param {String} text
  * @return {String}
  */
-function label (text) {
+function label(text) {
 	return bold(font(profileColor, text + ':')) + SPACE;
 }
 
-function currencyName (amount) {
+function currencyName(amount) {
 	var name = " buck";
 	return amount === 1 ? name : name + "s";
 }
@@ -127,22 +128,18 @@ Profile.prototype.seen = function (timeAgo) {
 };
 
 Profile.prototype.show = function (callback) {
-	var _this = this;
 	var userid = toId(this.username);
 
 	Database.read('money', userid, function (err, money) {
 		if (err) throw err;
 		if (!money) money = 0;
-		Database.read('seen', userid, function (err, seen) {
-			if (err) throw err;
-			callback(_this.avatar() +
-				SPACE + _this.name() + BR +
-				SPACE + _this.group() + BR +
-				SPACE + _this.money(money) + BR +
-				SPACE + _this.seen(seen) +
-				'<br clear="all">');
-		});
-	});
+		return callback(this.avatar() +
+										SPACE + this.name() + BR +
+										SPACE + this.group() + BR +
+										SPACE + this.money(money) + BR +
+										SPACE + this.seen(Seen[userid]) +
+										'<br clear="all">');
+	}.bind(this));
 };
 
 exports.commands = {
@@ -161,5 +158,5 @@ exports.commands = {
 			room.update();
 		}.bind(this));
 	},
-	profilehelp: ["/profile -  Shows information regarding user's name, group, money, and when they were last seen."]
+	profilehelp: ["/profile -	Shows information regarding user's name, group, money, and when they were last seen."]
 };

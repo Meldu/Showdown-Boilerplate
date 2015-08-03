@@ -28,6 +28,7 @@ const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
 
 var fs = require('fs');
+var steno = require('steno');
 
 /* global Users: true */
 var Users = module.exports = getUser;
@@ -424,7 +425,7 @@ function cacheGroupData() {
 	var groups = Config.groups;
 	var cachedGroups = {};
 
-	function cacheGroup (sym, groupData) {
+	function cacheGroup(sym, groupData) {
 		if (cachedGroups[sym] === 'processing') return false; // cyclic inheritance.
 
 		if (cachedGroups[sym] !== true && groupData['inherit']) {
@@ -899,7 +900,7 @@ User = (function () {
 			} else if (userType === '4') {
 				this.autoconfirmed = userid;
 			} else if (userType === '5') {
-				this.lock(false, userid);
+				this.lock(false, userid + '#permalock');
 			} else if (userType === '6') {
 				this.ban(false, userid);
 			}
@@ -928,14 +929,14 @@ User = (function () {
 			if (this.named) user.prevNames[this.userid] = this.name;
 			this.destroy();
 			Rooms.global.checkAutojoin(user);
-			if (Config.loginfilter) Config.loginfilter(user, this);
+			if (Config.loginfilter) Config.loginfilter(user, this, userType);
 			return true;
 		}
 
 		// rename success
 		if (this.forceRename(name, registered)) {
 			Rooms.global.checkAutojoin(this);
-			if (Config.loginfilter) Config.loginfilter(this);
+			if (Config.loginfilter) Config.loginfilter(this, null, userType);
 			return true;
 		}
 		return false;
@@ -1185,8 +1186,11 @@ User = (function () {
 		}
 	};
 	User.prototype.onDisconnect = function (connection) {
-		if (this.registered) {
-			Database.write('seen', Date.now(), this.userid, function (err) {
+		var name = 'Guest ' + this.guestNum;
+		var userid = toId(name);
+		if (this.registered && this.userid !== userid) {
+			Seen[this.userid] = Date.now();
+			steno.writeFile('config/seen.json', JSON.stringify(Seen, null, 2), function (err) {
 				if (err) throw err;
 			});
 		}
