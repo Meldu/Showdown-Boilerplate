@@ -1779,8 +1779,8 @@ var commands = exports.commands = {
 			this.sendReplyBox("<center><button name=\"saveReplay\"><i class=\"icon-upload\"></i> Save Replay</button> &mdash; <a href=\"https://www.smogon.com/forums/threads/3520646/\">Questions</a> &mdash; <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a></center>");
 		} else {
 			this.sendReplyBox(
-				"Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />" +
-				"- <a href=\"https://www.smogon.com/forums/threads/3520646/\">Questions</a><br />" +
+				"Have a replay showcasing a bug on EOS?<br />" +
+				"- <a href=\"http://eosforum.noip.us/showthread.php?tid=66\">Questions</a><br />" +
 				"- <a href=\"http://eosforum.noip.us/forumdisplay.php?fid=20\">Bug Reports</a>"
 			);
 		}
