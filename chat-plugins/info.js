@@ -20,14 +20,15 @@ var commands = exports.commands = {
 	alts: 'whois',
 	whoare: 'whois',
 	whois: function (target, room, user, connection, cmd) {
-		if (room.id === 'staff' && !this.canBroadcast()) return this.parse('/whois ' + target);
+		if (room.id === 'staff' && !this.canBroadcast()) return;
 		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 		var showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (showAll && !user.can('lock') && targetUser !== user) {
-			return this.errorReply("/alts - Access denied.");
+			// return this.errorReply("/alts - Access denied.");
+			return this.parse('/whois ' + target);
 		}
 
 		var buf = '<strong class="username"><small style="display:none">' + targetUser.group + '</small>' + Tools.escapeHTML(targetUser.name) + '</strong> ' + (!targetUser.connected ? ' <em style="color:gray">(offline)</em>' : '');
