@@ -1764,12 +1764,12 @@ var commands = exports.commands = {
 
 	forums: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("<a href=\"https://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209\">Pok&eacute;mon Showdown Forums</a>");
+		this.sendReplyBox("<a href=\"http://eosforum.noip.us/\">EOS Forums</a>");
 	},
 
 	suggestions: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("<a href=\"https://www.smogon.com/forums/threads/3534365/\">Make a suggestion for Pok&eacute;mon Showdown</a>");
+		this.sendReplyBox("<a href=\"http://eosforum.noip.us/forumdisplay.php?fid=23\">Make a suggestion for EOS</a>");
 	},
 
 	bugreport: 'bugs',
@@ -1781,9 +1781,15 @@ var commands = exports.commands = {
 			this.sendReplyBox(
 				"Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />" +
 				"- <a href=\"https://www.smogon.com/forums/threads/3520646/\">Questions</a><br />" +
-				"- <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a>"
+				"- <a href=\"http://eosforum.noip.us/forumdisplay.php?fid=20\">Bug Reports</a>"
 			);
 		}
+	},
+
+	website: 'site',
+	site: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("<a href=\"http://eosserver.weebly.com/\">EOS Website</a>");
 	},
 
 	avatars: function (target, room, user) {
