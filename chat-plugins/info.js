@@ -20,7 +20,7 @@ var commands = exports.commands = {
 	alts: 'whois',
 	whoare: 'whois',
 	whois: function (target, room, user, connection, cmd) {
-		if (room.id === 'staff' && !this.canBroadcast()) return;
+		if (room.id === 'staff' && !this.canBroadcast()) return this.parse('/whois ' + target);
 		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
